@@ -1,71 +1,79 @@
-"""prescription.py
-Contains the Prescription class and the PrescriptionStatus enum.
 """
+prescription.py
+
+Contains the Prescription class and PrescriptionStatus enum.
+Tracks the lifecycle of a prescription from creation to collection.
+"""
+
 from enum import Enum
 
-class PrescriptionStatus(Enum):
-    """ Used to track the status of the prescription  """
-    preparing_order = 1 # if the medication is in stock, the pharmacist needs to prepare the medication before it can be collected.
-    ready_for_collection = 2 # after the pharmacist has prepared the medication, it becomes ready for collection.
-    out_of_stock = 3 # when the medication is restocked, the status should become preparing_orderED 
-    collected = 4 # end status: the medication has been collected.
 
-class Prescription():
+class PrescriptionStatus(Enum):
     """
-    When the prescription is created:
-        If enough medication is in stock, the prescription status is preparing_order.
-        If there isn't enough medication in stock, the status is out_of_stock. 
-        Currently this state is only set when the prescription is created
-        YOUR TASK: Automatically update the status to preparing_order or out_of_stock when the medication stock level changes.              
-    Once the prescription is prepared, its status becomes ready_for_collection.
-    Once the prescription is collected, its status becomes collected (and no further action is needed).
+    Represents the possible states of a prescription.
+    """
+    PREPARING_ORDER = 1
+    READY_FOR_COLLECTION = 2
+    OUT_OF_STOCK = 3
+    COLLECTED = 4
+
+
+class Prescription:
+    """
+    Represents a prescription for a pet and medication.
+
+    Lifecycle:
+    - PREPARING_ORDER: medication is in stock and ready to be prepared
+    - OUT_OF_STOCK: insufficient stock available
+    - READY_FOR_COLLECTION: medication prepared
+    - COLLECTED: medication has been collected
     """
 
     def __init__(self, pet, medication, dosage):
-        """ Prescription  __init__
-        
-        :param self
-        :param pet (Pet): The pet the prescription is for
-        :param medication (Medication): The medication to be given to the pet
-        :param dosage (int): The amount of medication to be given to the pet
+        """
+        Initialise a Prescription object.
+
+        Args:
+            pet (Pet): The pet the prescription is for
+            medication (Medication): The medication prescribed
+            dosage (int): Amount of medication required
         """
         self.pet = pet
         self.medication = medication
         self.dosage = dosage
-        
-        self._prepareOrWaitForStock()
 
+        self._set_initial_status()
 
-    def _prepareOrWaitForStock(self):
-        """ Checks if there is enough medication is stock for this prescription.
-        :param self
+    def _set_initial_status(self):
+        """
+        Set initial prescription status based on stock availability.
         """
         if self.medication.has_enough_stock(self.dosage):
-            self.status = PrescriptionStatus.preparing_order
+            self.status = PrescriptionStatus.PREPARING_ORDER
         else:
-            self.status = PrescriptionStatus.out_of_stock
+            self.status = PrescriptionStatus.OUT_OF_STOCK
 
-    def prepareForCollection(self):
-        """ If the status is preparing_order, the order becomes ready_for_collection
-        :param self
-        :return True if the order becomes ready for collection; otherwise, False
+    def prepare_for_collection(self):
         """
-        if self.status == PrescriptionStatus.preparing_order:
+        Prepare prescription for collection if possible.
+
+        Returns:
+            bool: True if successfully prepared, otherwise False
+        """
+        if self.status == PrescriptionStatus.PREPARING_ORDER:
             self.medication.reduce_stock(self.dosage)
-            self.status = PrescriptionStatus.ready_for_collection
+            self.status = PrescriptionStatus.READY_FOR_COLLECTION
             return True
-        else:
-            return False
-            
+        return False
+
     def collect(self):
-        """ If the status is ready_for_collection, the order becomes collected
-        :param self
-        :return True if the order is collected; otherwise, False
         """
-        if self.status == PrescriptionStatus.ready_for_collection:
-            self.status = PrescriptionStatus.collected
+        Mark prescription as collected if ready.
+
+        Returns:
+            bool: True if successfully collected, otherwise False
+        """
+        if self.status == PrescriptionStatus.READY_FOR_COLLECTION:
+            self.status = PrescriptionStatus.COLLECTED
             return True
-        else:
-            return False
-#EOF
-#----
+        return False

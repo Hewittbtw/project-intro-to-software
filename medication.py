@@ -1,36 +1,53 @@
-""" medication.py
-contains the medication class 
+"""
+medication.py
+
+Contains the Medication class which tracks stock levels and allows
+stock management operations such as restocking and reducing stock.
 """
 
 
-class Medication():
+class Medication:
+    """
+    Represents a medication with a name and stock level.
+    """
+
     def __init__(self, name, amount_in_stock):
         """
-        Medication __init__
-        
-        :param self
-        :param name (string): the name of the medication
-        :param amount_in_stock: how much of this medication is in stock
+        Initialise a Medication object.
+
+        Args:
+            name (str): Name of the medication
+            amount_in_stock (int): Initial stock level
         """
         self.name = name
-        self.amountInStock = amount_in_stock
+        self.amount_in_stock = amount_in_stock
 
     def restock(self, amount):
-        """        
-        :param self
-        :param amount (int): The amount to increase the stock by
         """
-        self.amountInStock += amount
+        Increase stock by a given amount.
 
-    
+        Args:
+            amount (int): Amount to add to stock
+        """
+        self.amount_in_stock += amount
+
     def reduce_stock(self, amount):
-        self.amountInStock -= amount
-
-
-    def has_enough_stock(self, dosage):        
-        """ Checks if there is enough stock for the given dosage.   
-        :param self
-        :param dosage (int): The dosage to be checked.
-        :returns True or False
         """
-        return self.amountInStock >= dosage
+        Decrease stock by a given amount.
+
+        Args:
+            amount (int): Amount to remove from stock
+        """
+        self.amount_in_stock -= amount
+
+    def has_enough_stock(self, dosage):
+        """
+        Check if there is enough stock for a given dosage.
+
+        Args:
+            dosage (int): Required amount
+
+        Returns:
+            bool: True if enough stock exists, otherwise False
+        """
+        return self.amount_in_stock >= dosage

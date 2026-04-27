@@ -1,19 +1,24 @@
-""" utils.py
-Helper functions.
 """
+utils.py
+
+Helper functions used across the veterinary practice system.
+"""
+
 
 def find_by_name(name, items):
     """
-    Searches a list of items for a item with a name that matches the provided name.
-    
-    :param name (string): The name to search for.
-    :param items (objects with object.name): The list of items to be searched.
+    Search a list of objects and return the first item
+    whose 'name' attribute matches the given name.
 
-    :returns the found item
+    Args:
+        name (str): Name to search for
+        items (list): List of objects that have a 'name' attribute
+
+    Returns:
+        object or None: The matching item if found, otherwise None
     """
-    item = [item for item in items if item.name == name]
+    for item in items:
+        if item.name == name:
+            return item
 
-    if len(item) > 0:
-        return item[0]
-    
     return None
