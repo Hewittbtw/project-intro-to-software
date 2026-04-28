@@ -1,36 +1,40 @@
-""" medication.py
-contains the medication class 
+"""
+medication.py
 """
 
+from abc import ABC, abstractmethod
 
-class Medication():
+
+class Medication:
     def __init__(self, name, amount_in_stock):
-        """
-        Medication __init__
-        
-        :param self
-        :param name (string): the name of the medication
-        :param amount_in_stock: how much of this medication is in stock
-        """
         self.name = name
-        self.amountInStock = amount_in_stock
+        self.amount_in_stock = amount_in_stock
+        self._observers = []
+
+    # --------------------
+    # Observer pattern
+
+    def attach(self, observer):
+        if observer not in self._observers:
+            self._observers.append(observer)
+
+    def detach(self, observer):
+        if observer in self._observers:
+            self._observers.remove(observer)
+
+    def notify(self):
+        for observer in self._observers:
+            observer.update(self)
+
+    # --------------------
+    # Stock logic
 
     def restock(self, amount):
-        """        
-        :param self
-        :param amount (int): The amount to increase the stock by
-        """
-        self.amountInStock += amount
+        self.amount_in_stock += amount
+        self.notify()
 
-    
     def reduce_stock(self, amount):
-        self.amountInStock -= amount
+        self.amount_in_stock -= amount
 
-
-    def has_enough_stock(self, dosage):        
-        """ Checks if there is enough stock for the given dosage.   
-        :param self
-        :param dosage (int): The dosage to be checked.
-        :returns True or False
-        """
-        return self.amountInStock >= dosage
+    def has_enough_stock(self, dosage):
+        return self.amount_in_stock >= dosage
