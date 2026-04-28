@@ -87,7 +87,14 @@ class UserInterface:
 
         time = input("Enter appointment date and time (any string): ")
 
+        from appointment_decorator import VaccinationDecorator, SurgeryDecorator
+
         appointment = Appointment(pet, time)
+
+        # Add 2 vaccinations + 1 surgery using decorators
+        appointment = VaccinationDecorator(appointment)
+        appointment = VaccinationDecorator(appointment)
+        appointment = SurgeryDecorator(appointment)
 
         appointment_id = self.vp.create_appointment(appointment)
         print(f"The appointment ID is {appointment_id}")
