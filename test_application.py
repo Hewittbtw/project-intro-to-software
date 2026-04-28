@@ -37,7 +37,7 @@ def test_appointments():
     vp, pet = setup_system()
 
     # Mock input
-    appointment.input = lambda: "input"
+    appointment.input = lambda prompt=None: "input"
 
     a = Appointment(pet, "Today")
     vp.create_appointment(a)

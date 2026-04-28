@@ -33,7 +33,7 @@ class Appointment:
         Record attendance details such as weight and health notes.
         """
         weight = input("Enter pet weight: ")
-        self.notes.append(f"weight = {weight}")
+        self.notes.append(f"weight= {weight}")
 
         health_notes = input("Enter health notes: ")
         self.notes.append(health_notes)
